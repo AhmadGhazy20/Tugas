@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas 2 Javascript - Data Pegawai</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: center;
+        }
+        thead {
+            background-color: #007BFF;
+            color: white;
+        }
+        tfoot {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tfoot th {
+            text-align: right;
+            padding-right: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Data Pegawai</h2>
+    
+    <!-- Wadah untuk memunculkan tabel dari Javascript -->
+    <div id="hasil-tabel"></div>
+
+    <script>
+        // 1. Deklarasi Variabel Data Pegawai
+        let namaPegawai = "dodi prayodi";
+        let umur = 25;
+        let jabatan = "manajer";
+        let status = "menikah";
+
+        // 2. Logika Gaji Pokok menggunakan (if)
+        let gapok = 0;
+        let jabatanLower = jabatan.toLowerCase();
+
+        if (jabatanLower === "manajer") {
+            gapok = 15000000;
+        } else if (jabatanLower === "asisten manajer") {
+            gapok = 10000000;
+        } else if (jabatanLower === "staff") {
+            gapok = 5000000;
+        }
+
+        // 3. Perhitungan Tunjangan Jabatan dan BPJS
+        let tunjJabatan = 0.15 * gapok;
+        let bpjs = 0.10 * gapok;
+
+        // 4. Logika Tunjangan Keluarga menggunakan (ternary)
+        let tunjKeluarga = (status.toLowerCase() === "menikah") ? (0.20 * gapok) : 0;
+
+        // 5. Total Gaji 
+        // (Catatan: BPJS umumnya dihitung sebagai potongan, sehingga mengurangi total gaji)
+        let totalGaji = gapok + tunjJabatan + tunjKeluarga - bpjs;
+
+        // Fungsi bantuan untuk format Rupiah
+        const formatRupiah = (angka) => {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(angka);
+        };
+
+        // 6. Membuat Struktur Tabel HTML beserta thead, tbody, dan tfoot
+        let tabelHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama Pegawai</th>
+                        <th>Umur</th>
+                        <th>Jabatan</th>
+                        <th>Status</th>
+                        <th>Gaji Pokok</th>
+                        <th>Tunjangan Jabatan</th>
+                        <th>BPJS (Potongan)</th>
+                        <th>Tunjangan Keluarga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-transform: capitalize;">${namaPegawai}</td>
+                        <td>${umur} Tahun</td>
+                        <td style="text-transform: capitalize;">${jabatan}</td>
+                        <td style="text-transform: capitalize;">${status}</td>
+                        <td>${formatRupiah(gapok)}</td>
+                        <td>${formatRupiah(tunjJabatan)}</td>
+                        <td>${formatRupiah(bpjs)}</td>
+                        <td>${formatRupiah(tunjKeluarga)}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="7">Total Gaji Keseluruhan (Take Home Pay)</th>
+                        <th>${formatRupiah(totalGaji)}</th>
+                    </tr>
+                </tfoot>
+            </table>
+        `;
+
+        // 7. Mencetak hasil tabel ke dalam div 'hasil-tabel'
+        document.getElementById("hasil-tabel").innerHTML = tabelHTML;
+    </script>
+
+</body>
+</html>
